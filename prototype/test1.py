@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import argparse
 import datetime
 import os
 
@@ -9,12 +8,6 @@ class Activity(object):
     def __init__(self, duration, description):
         self.duration = duration
         self.description = description
-
-    # def __eq__(self, other):
-    #     return self.description == other.description
-
-    # def __hash__(self):
-    #     return hash(self.description)
 
     def __str__(self):
         return "{0} {1}".format(str(self.duration), self.description)
@@ -26,12 +19,8 @@ class Event(object):
         self.description = description
 
     @classmethod
-    def first(class_):
-        return class_(datetime.datetime.min, None)
-
-    # @classmethod
-    # def last(class_):
-    #     return class_(datetime.datetime.max, None)
+    def first(cls):
+        return cls(datetime.datetime.min, None)
 
     def to_activity(self, next_):
         return Activity(next_.timestamp - self.timestamp, self.description)
@@ -55,7 +44,10 @@ def event_activity(events):
 
 
 def __main__():
-    print(sum([i.duration for i in event_activity(timesheet_events()) if i.description == 'SC2!'], datetime.timedelta()))
+    print(sum(
+        [i.duration for i in event_activity(timesheet_events()) if i.description == 'SC2!'],
+        datetime.timedelta()
+    ))
 
 
 if __name__ == "__main__":
