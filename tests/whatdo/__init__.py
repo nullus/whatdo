@@ -27,9 +27,3 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-
-
-def test_the_truth():
-    """When you have nothing to test, test nothing."""
-
-    assert True

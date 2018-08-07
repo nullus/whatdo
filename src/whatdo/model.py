@@ -29,7 +29,13 @@
 #
 
 
-def test_the_truth():
-    """When you have nothing to test, test nothing."""
+from datetime import datetime
 
-    assert True
+
+class Event(object):
+    """
+    Representation of a timesheet event
+    """
+
+    def __init__(self, when: datetime, what: str) -> None:
+        pass

@@ -29,7 +29,13 @@
 #
 
 
-def test_the_truth():
-    """When you have nothing to test, test nothing."""
+from datetime import datetime
 
-    assert True
+from whatdo.model import Event
+
+
+def test_initialise_event_created():
+    """Create an event with standard parameters"""
+
+    event = Event(datetime.utcnow(), "Something happened")
+    assert isinstance(event, Event)
