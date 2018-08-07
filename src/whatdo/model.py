@@ -38,4 +38,5 @@ class Event(object):
     """
 
     def __init__(self, when: datetime, what: str) -> None:
-        pass
+        self.when = when
+        self.what = what

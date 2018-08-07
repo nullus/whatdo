@@ -34,8 +34,18 @@ from datetime import datetime
 from whatdo.model import Event
 
 
-def test_initialise_event_created():
-    """Create an event with standard parameters"""
+def test_event_created():
+    """Create an event"""
 
     event = Event(datetime.utcnow(), "Something happened")
     assert isinstance(event, Event)
+
+
+def test_event_properties_match():
+    """Event properties are equal to parameters"""
+
+    when = datetime(1985, 10, 26, 1, 22)
+    what = "Something happened"
+    event = Event(when, what)
+    assert event.when == when
+    assert event.what == what
