@@ -28,15 +28,26 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-
 from datetime import datetime
+from typing import List
 
 
 class Event(object):
     """
-    Representation of a timesheet event
+    An event, UTC timestamp and generic description
     """
 
     def __init__(self, when: datetime, what: str) -> None:
         self.when = when
         self.what = what
+
+
+class Timesheet(List[Event]):
+    """
+    Collection of events
+    """
+
+    def append(self, item: Event) -> None:
+        if not isinstance(item, Event):
+            raise TypeError(f"Expected item to be Event (got {type(item)})")
+        return super().append(item)

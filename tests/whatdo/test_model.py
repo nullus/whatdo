@@ -31,7 +31,9 @@
 
 from datetime import datetime
 
-from whatdo.model import Event
+from pytest import raises
+
+from whatdo.model import Event, Timesheet
 
 
 def test_event_created():
@@ -49,3 +51,18 @@ def test_event_properties_match():
     event = Event(when, what)
     assert event.when == when
     assert event.what == what
+
+
+def test_timesheet_append_event_succeeds():
+    """Can append an event to a timesheet"""
+
+    timesheet = Timesheet()
+    timesheet.append(Event(datetime.utcnow(), "Something happened"))
+
+
+def test_timesheet_append_other_fails():
+    """Can't append other types to a timesheet"""
+
+    timesheet = Timesheet()
+    with raises(TypeError):
+        timesheet.append("Boom")
