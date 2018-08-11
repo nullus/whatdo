@@ -65,4 +65,5 @@ def test_timesheet_append_other_fails():
 
     timesheet = Timesheet()
     with raises(TypeError):
+        # noinspection PyTypeChecker
         timesheet.append("Boom")
