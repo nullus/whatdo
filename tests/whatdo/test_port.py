@@ -27,3 +27,19 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+
+from whatdo.port import Timetracker
+
+
+def test_create_timetracker():
+    """Can create instance of Timetracker"""
+
+    timetracker = Timetracker()
+    assert isinstance(timetracker, Timetracker)
+
+
+def test_timetracker_log_event_succeeds():
+    """Record and event using timetracker"""
+
+    timetracker = Timetracker()
+    timetracker.log_event("We are doing a thing")
