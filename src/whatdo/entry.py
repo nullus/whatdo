@@ -28,20 +28,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from argparse import ArgumentParser
+import sys
 
-from typing import List
+from whatdo.adaptor import CommandLine
 
 
-class CommandLine(object):
-    """
-    Log events to timetracker via command line
-    """
+def cli() -> None:
+    """Command line entry point for CommandLine adaptor"""
 
-    def __init__(self, arguments: List[str]) -> None:
-        parser = ArgumentParser(description=self.__doc__)
-        parser.add_argument('what', nargs='+')
-        self.arguments = parser.parse_args(arguments)
-
-    def __call__(self) -> int:
-        return 0
+    command_line = CommandLine(sys.argv[1:])
+    sys.exit(command_line())
