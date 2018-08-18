@@ -32,16 +32,20 @@ from argparse import ArgumentParser
 
 from typing import List
 
+from .port import Timetracker
+
 
 class CommandLine(object):
     """
     Log events to timetracker via command line
     """
 
-    def __init__(self, arguments: List[str]) -> None:
+    def __init__(self, timetracker: Timetracker) -> None:
+        self.timetracker = timetracker
+
+    def __call__(self, arguments: List[str]) -> int:
         parser = ArgumentParser(description=self.__doc__)
         parser.add_argument('what', nargs='+')
-        self.arguments = parser.parse_args(arguments)
-
-    def __call__(self) -> int:
+        what: str = ' '.join(parser.parse_args(arguments).what)
+        self.timetracker.log_event(what)
         return 0

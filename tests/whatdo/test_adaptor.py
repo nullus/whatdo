@@ -28,27 +28,49 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from unittest.mock import MagicMock
+
 from pytest import raises
 
 from whatdo.adaptor import CommandLine
 
 
-def test_command_line_without_arguments_show_usage():
-    """Should raise a SystemExit exception without arguments"""
+def test_command_line_initialise_success():
+    """Can initialise CommandLine with Timetracker port"""
 
+    timetracker = MagicMock()
+    # noinspection PyTypeChecker
+    command_line = CommandLine(timetracker)
+    assert isinstance(command_line, CommandLine)
+
+
+def test_command_line_call_no_arguments_will_exit():
+    """Calling CommandLine with an empty arguments list will exit"""
+
+    timetracker = MagicMock()
     with raises(SystemExit):
-        CommandLine([])
+        # noinspection PyTypeChecker
+        command_line = CommandLine(timetracker)
+        command_line([])
 
 
-def test_command_line_one_or_more_arguments_accept():
-    """Should accept one command line argument"""
+def test_command_line_call_with_arguments_invokes_log_event():
+    """When CommandLine is called with multiple arguments invoke log_event"""
 
-    command_line = CommandLine(['one'])
-    assert isinstance(command_line, CommandLine)
+    timetracker = MagicMock()
+    # noinspection PyTypeChecker
+    command_line = CommandLine(timetracker)
+    command_line('many arguments are also accepted'.split(' '))
+    timetracker.log_event.assert_called_once()
+    timetracker.log_event.assert_called_with('many arguments are also accepted')
 
 
-def test_command_line_multiple_arguments_accept():
-    """Should accept multiple command line arguments"""
+def test_command_line_call_with_one_argument_invokes_log_event():
+    """When CommandLine is called invoke log_event"""
 
-    command_line = CommandLine('many arguments are also accepted'.split(' '))
-    assert isinstance(command_line, CommandLine)
+    timetracker = MagicMock()
+    # noinspection PyTypeChecker
+    command_line = CommandLine(timetracker)
+    command_line(['one'])
+    timetracker.log_event.assert_called_once()
+    timetracker.log_event.assert_called_with('one')

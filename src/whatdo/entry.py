@@ -31,10 +31,12 @@
 import sys
 
 from whatdo.adaptor import CommandLine
+from whatdo.port import Timetracker
 
 
 def cli() -> None:
     """Command line entry point for CommandLine adaptor"""
 
-    command_line = CommandLine(sys.argv[1:])
-    sys.exit(command_line())
+    timetracker = Timetracker()
+    command_line = CommandLine(timetracker)
+    sys.exit(command_line(sys.argv[1:]))

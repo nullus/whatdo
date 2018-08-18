@@ -30,7 +30,7 @@
 
 import sys
 
-import pytest
+from pytest import raises
 
 from whatdo.entry import cli
 
@@ -39,7 +39,7 @@ def test_cli_empty_arguments_returns_nonzero(monkeypatch):
     """Without arguments entry point should return an error status"""
 
     monkeypatch.setattr(sys, 'argv', [''])
-    with pytest.raises(SystemExit) as exit_:
+    with raises(SystemExit) as exit_:
         cli()
         assert exit_ != 0
 
@@ -48,6 +48,6 @@ def test_cli_arguments_returns_zero(monkeypatch):
     """With arguments entry point should return a success status"""
 
     monkeypatch.setattr(sys, 'argv', [''] + 'some arguments please'.split(' '))
-    with pytest.raises(SystemExit) as exit_:
+    with raises(SystemExit) as exit_:
         cli()
         assert exit_ == 0
