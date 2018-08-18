@@ -30,8 +30,8 @@
 
 import sys
 
-from whatdo.adaptor import CommandLine
-from whatdo.port import Timetracker
+from .adaptor import CommandLine
+from .port import Timetracker
 
 
 def cli() -> None:

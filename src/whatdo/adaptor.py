@@ -29,7 +29,6 @@
 #
 
 from argparse import ArgumentParser
-
 from typing import List
 
 from .port import Timetracker
