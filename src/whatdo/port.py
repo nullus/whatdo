@@ -32,3 +32,7 @@
 class Timetracker(object):
     def log_event(self, what: str) -> None:
         pass
+
+
+class Storage(object):
+    pass

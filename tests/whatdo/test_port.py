@@ -28,7 +28,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from whatdo.port import Timetracker
+from whatdo.port import Storage, Timetracker
 
 
 def test_create_timetracker():
@@ -43,3 +43,10 @@ def test_timetracker_log_event_succeeds():
 
     timetracker = Timetracker()
     timetracker.log_event("We are doing a thing")
+
+
+def test_create_storage():
+    """Can create Storage instance"""
+
+    storage = Storage()
+    assert isinstance(storage, Storage)
