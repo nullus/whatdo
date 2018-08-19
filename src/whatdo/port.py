@@ -30,6 +30,8 @@
 
 from typing import Any
 
+from whatdo.model import Timesheet
+
 
 class Timetracker(object):
     def log_event(self, what: str) -> None:
@@ -37,7 +39,7 @@ class Timetracker(object):
 
 
 class Storage(object):
-    def __init__(self, adaptor: Any) -> None:
+    def __init__(self, timesheet: Timesheet, adaptor: Any) -> None:
         pass
 
     def persist(self) -> bool:

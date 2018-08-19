@@ -28,32 +28,18 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from whatdo.port import Storage, Timetracker
+from unittest.mock import MagicMock
+
+from pytest import fixture
+
+from whatdo.model import Timesheet
 
 
-def test_create_timetracker():
-    """Can create instance of Timetracker"""
-
-    timetracker = Timetracker()
-    assert isinstance(timetracker, Timetracker)
+@fixture(scope='function')
+def storage_adaptor():
+    return MagicMock()
 
 
-def test_timetracker_log_event_succeeds():
-    """Record and event using timetracker"""
-
-    timetracker = Timetracker()
-    timetracker.log_event("We are doing a thing")
-
-
-def test_create_storage(empty_timesheet, storage_adaptor):
-    """Can create Storage instance"""
-
-    storage = Storage(empty_timesheet, storage_adaptor)
-    assert isinstance(storage, Storage)
-
-
-def test_storage_persist_succeeds(empty_timesheet, storage_adaptor):
-    """Storage port can persist data"""
-
-    storage = Storage(empty_timesheet, storage_adaptor)
-    assert storage.persist()
+@fixture(scope='function')
+def empty_timesheet():
+    return Timesheet()
