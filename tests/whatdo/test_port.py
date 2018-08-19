@@ -28,7 +28,16 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from unittest.mock import MagicMock
+
+from pytest import fixture
+
 from whatdo.port import Storage, Timetracker
+
+
+@fixture(scope='function')
+def storage_adaptor():
+    return MagicMock()
 
 
 def test_create_timetracker():
@@ -45,8 +54,15 @@ def test_timetracker_log_event_succeeds():
     timetracker.log_event("We are doing a thing")
 
 
-def test_create_storage():
+def test_create_storage(storage_adaptor):
     """Can create Storage instance"""
 
-    storage = Storage()
+    storage = Storage(storage_adaptor)
     assert isinstance(storage, Storage)
+
+
+def test_storage_persist_succeeds(storage_adaptor):
+    """Storage port can persist data"""
+
+    storage = Storage(storage_adaptor)
+    assert storage.persist()

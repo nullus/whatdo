@@ -28,6 +28,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from typing import Any
+
 
 class Timetracker(object):
     def log_event(self, what: str) -> None:
@@ -35,4 +37,8 @@ class Timetracker(object):
 
 
 class Storage(object):
-    pass
+    def __init__(self, adaptor: Any) -> None:
+        pass
+
+    def persist(self) -> bool:
+        return True
