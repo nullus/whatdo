@@ -51,4 +51,6 @@ class CommandLine(object):
 
 
 class MemoryStorage(StorageInterface):
-    pass
+    """
+    Back storage interface with list
+    """

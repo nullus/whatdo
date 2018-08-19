@@ -28,7 +28,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from typing import Any
+from typing import Any, Iterator, Tuple
 
 from .model import Timesheet
 
@@ -47,4 +47,5 @@ class Storage(object):
 
 
 class StorageInterface(object):
-    pass
+    def write(self, records: Iterator[Tuple[str, str]]):
+        pass

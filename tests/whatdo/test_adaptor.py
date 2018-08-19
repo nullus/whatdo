@@ -81,3 +81,15 @@ def test_memory_storage_initialise_success():
 
     memory_storage = MemoryStorage()
     assert isinstance(memory_storage, MemoryStorage)
+
+
+def test_memory_storage_store_records():
+
+    test_data = [
+        (datetime(1985, 10, 26, 1, 21).isoformat(), 'Destination Time'),
+        (datetime(1985, 10, 26, 1, 22).isoformat(), 'Present Time'),
+        (datetime(1985, 10, 26, 1, 20).isoformat(), 'Last Time Departed'),
+    ]
+
+    memory_storage = MemoryStorage()
+    memory_storage.write(iter(test_data))
