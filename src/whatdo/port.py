@@ -30,7 +30,7 @@
 
 from typing import Any
 
-from whatdo.model import Timesheet
+from .model import Timesheet
 
 
 class Timetracker(object):
@@ -44,3 +44,7 @@ class Storage(object):
 
     def persist(self) -> bool:
         return True
+
+
+class StorageInterface(object):
+    pass

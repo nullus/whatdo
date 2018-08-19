@@ -31,7 +31,7 @@
 from argparse import ArgumentParser
 from typing import List
 
-from .port import Timetracker
+from .port import StorageInterface, Timetracker
 
 
 class CommandLine(object):
@@ -48,3 +48,7 @@ class CommandLine(object):
         what: str = ' '.join(parser.parse_args(arguments).what)
         self.timetracker.log_event(what)
         return 0
+
+
+class MemoryStorage(StorageInterface):
+    pass

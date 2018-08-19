@@ -27,12 +27,12 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-
+from datetime import datetime
 from unittest.mock import MagicMock
 
 from pytest import raises
 
-from whatdo.adaptor import CommandLine
+from whatdo.adaptor import CommandLine, MemoryStorage
 
 
 def test_command_line_initialise_success():
@@ -74,3 +74,10 @@ def test_command_line_call_with_one_argument_invokes_log_event():
     command_line(['one'])
     timetracker.log_event.assert_called_once()
     timetracker.log_event.assert_called_with('one')
+
+
+def test_memory_storage_initialise_success():
+    """Can initialise a MemoryStorage adaptor"""
+
+    memory_storage = MemoryStorage()
+    assert isinstance(memory_storage, MemoryStorage)
