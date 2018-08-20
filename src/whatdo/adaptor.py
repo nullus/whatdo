@@ -29,7 +29,8 @@
 #
 
 from argparse import ArgumentParser
-from typing import List
+from datetime import datetime
+from typing import List, Iterator, Tuple
 
 from .port import StorageInterface, Timetracker
 
@@ -54,3 +55,6 @@ class MemoryStorage(StorageInterface):
     """
     Back storage interface with list
     """
+
+    def write(self, records: Iterator[Tuple[datetime, str]]) -> None:
+        pass

@@ -28,6 +28,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from abc import ABC, abstractmethod
+from datetime import datetime
+
 from typing import Any, Iterator, Tuple
 
 from .model import Timesheet
@@ -46,6 +49,7 @@ class Storage(object):
         return True
 
 
-class StorageInterface(object):
-    def write(self, records: Iterator[Tuple[str, str]]) -> None:
+class StorageInterface(ABC):
+    @abstractmethod
+    def write(self, records: Iterator[Tuple[datetime, str]]) -> None:
         pass
