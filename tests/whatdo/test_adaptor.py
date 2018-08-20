@@ -92,4 +92,23 @@ def test_memory_storage_store_records():
     ]
 
     memory_storage = MemoryStorage()
-    memory_storage.write(iter(test_data))
+    memory_storage.store(iter(test_data))
+
+
+def test_memory_storage_retrieve_records():
+
+    test_data = [
+        (datetime(1985, 10, 26, 1, 21), 'Destination Time'),
+        (datetime(1985, 10, 26, 1, 22), 'Present Time'),
+        (datetime(1985, 10, 26, 1, 20), 'Last Time Departed'),
+    ]
+
+    memory_storage = MemoryStorage()
+    memory_storage.store(iter(test_data))
+
+    i = 0
+    for i, record in enumerate(memory_storage.retrieve()):
+        assert record[0] == test_data[i][0]
+        assert record[1] == test_data[i][1]
+
+    assert i == len(test_data) - 1

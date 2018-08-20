@@ -51,5 +51,9 @@ class Storage(object):
 
 class StorageInterface(ABC):
     @abstractmethod
-    def write(self, records: Iterator[Tuple[datetime, str]]) -> None:
+    def store(self, records: Iterator[Tuple[datetime, str]]) -> None:
+        pass
+
+    @abstractmethod
+    def retrieve(self) -> Iterator[Tuple[datetime, str]]:
         pass
