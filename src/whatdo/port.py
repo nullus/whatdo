@@ -29,7 +29,7 @@
 #
 
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timezone
 
 from typing import Any, Iterator, Tuple
 
@@ -50,6 +50,9 @@ class Storage(object):
 
 
 class StorageInterface(ABC):
+    ISO_TIMESPEC = 'microseconds'
+    P_FMT = '%Y-%m-%dT%H:%M:%S.%f'
+
     @abstractmethod
     def store(self, records: Iterator[Tuple[datetime, str]]) -> None:
         pass
@@ -57,3 +60,15 @@ class StorageInterface(ABC):
     @abstractmethod
     def retrieve(self) -> Iterator[Tuple[datetime, str]]:
         pass
+
+    def _input(self, in_: Tuple[str, str]) -> Tuple[datetime, str]:
+        return (
+            datetime.strptime(in_[0], self.P_FMT).replace(tzinfo=timezone.utc).astimezone(tz=None).replace(tzinfo=None),
+            in_[1]
+        )
+
+    def _output(self, out: Tuple[datetime, str]) -> Tuple[str, str]:
+        return (
+            out[0].astimezone(tz=timezone.utc).replace(tzinfo=None).isoformat(timespec=self.ISO_TIMESPEC),
+            out[1]
+        )

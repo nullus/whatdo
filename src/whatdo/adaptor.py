@@ -29,7 +29,7 @@
 #
 
 from argparse import ArgumentParser
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import List, Iterator, Tuple
 
 from .port import StorageInterface, Timetracker
@@ -62,14 +62,9 @@ class MemoryStorage(StorageInterface):
 
     def retrieve(self) -> Iterator[Tuple[datetime, str]]:
         for record in self.data:
-            yield datetime.strptime(
-                record[0], '%Y-%m-%dT%H:%M:%S.%f'
-            ).replace(tzinfo=timezone.utc).astimezone(tz=None).replace(tzinfo=None), record[1]
+            yield self._input(record)
 
     def store(self, records: Iterator[Tuple[datetime, str]]) -> None:
         self.data.clear()
         for record in records:
-            self.data.append(
-                (record[0].astimezone(tz=timezone.utc).replace(tzinfo=None).isoformat(timespec='microseconds'),
-                 record[1])
-            )
+            self.data.append(self._output(record))
