@@ -47,5 +47,5 @@ class Storage(object):
 
 
 class StorageInterface(object):
-    def write(self, records: Iterator[Tuple[str, str]]):
+    def write(self, records: Iterator[Tuple[str, str]]) -> None:
         pass
