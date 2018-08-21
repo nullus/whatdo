@@ -29,7 +29,7 @@
 #
 
 from argparse import ArgumentParser
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Iterator, Tuple
 
 from .port import StorageInterface, Timetracker
@@ -51,7 +51,18 @@ class CommandLine(object):
         return 0
 
 
-class MemoryStorage(StorageInterface):
+class DatetimeConversionMixin(object):
+    P_FMT = '%Y-%m-%dT%H:%M:%S.%f'
+    ISO_TIMESPEC = 'microseconds'
+
+    def to_datetime(self, in_: str) -> datetime:
+        return datetime.strptime(in_, self.P_FMT).replace(tzinfo=timezone.utc).astimezone(tz=None).replace(tzinfo=None)
+
+    def from_datetime(self, out: datetime) -> str:
+        return out.astimezone(tz=timezone.utc).replace(tzinfo=None).isoformat(timespec=self.ISO_TIMESPEC)
+
+
+class MemoryStorage(DatetimeConversionMixin, StorageInterface):
     """
     Back storage interface with list
     """
@@ -62,9 +73,9 @@ class MemoryStorage(StorageInterface):
 
     def retrieve(self) -> Iterator[Tuple[datetime, str]]:
         for record in self.data:
-            yield self._input(record)
+            yield self.to_datetime(record[0]), record[1]
 
     def store(self, records: Iterator[Tuple[datetime, str]]) -> None:
         self.data.clear()
         for record in records:
-            self.data.append(self._output(record))
+            self.data.append((self.from_datetime(record[0]), record[1]))
