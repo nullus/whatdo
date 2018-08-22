@@ -39,7 +39,7 @@ from whatdo.model import Event, Timesheet
 def test_event_created():
     """Create an event"""
 
-    event = Event(datetime.utcnow(), "Something happened")
+    event = Event(datetime.now(), "Something happened")
     assert isinstance(event, Event)
 
 
@@ -57,7 +57,8 @@ def test_timesheet_append_event_succeeds():
     """Can append an event to a timesheet"""
 
     timesheet = Timesheet()
-    timesheet.append(Event(datetime.utcnow(), "Something happened"))
+    timesheet.append(Event(datetime.now(), "Something happened"))
+    assert len(timesheet) == 1
 
 
 def test_timesheet_append_other_fails():

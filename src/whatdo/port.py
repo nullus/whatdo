@@ -31,26 +31,21 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from typing import Any, Iterator, Tuple
+from typing import Iterator, Tuple
 
-from .model import Timesheet
+from .model import Timesheet, Event
 
 
 class Timetracker(object):
+    def __init__(self, timesheet: Timesheet):
+        super().__init__()
+        self.timesheet = timesheet
+
     def log_event(self, what: str) -> None:
-        pass
-
-
-class Storage(object):
-    def __init__(self, timesheet: Timesheet, adaptor: Any) -> None:
-        pass
-
-    def persist(self) -> bool:
-        return True
+        self.timesheet.append(Event(datetime.now(), what))
 
 
 class StorageInterface(ABC):
-
     @abstractmethod
     def store(self, records: Iterator[Tuple[datetime, str]]) -> None:
         pass
@@ -58,3 +53,11 @@ class StorageInterface(ABC):
     @abstractmethod
     def retrieve(self) -> Iterator[Tuple[datetime, str]]:
         pass
+
+
+class Storage(object):
+    def __init__(self, timesheet: Timesheet, adaptor: StorageInterface) -> None:
+        pass
+
+    def persist(self) -> bool:
+        return True

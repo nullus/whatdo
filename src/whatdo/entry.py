@@ -30,6 +30,7 @@
 
 import sys
 
+from whatdo.model import Timesheet
 from .adaptor import CommandLine
 from .port import Timetracker
 
@@ -37,6 +38,8 @@ from .port import Timetracker
 def cli() -> None:
     """Command line entry point for CommandLine adaptor"""
 
-    timetracker = Timetracker()
+    timesheet = Timesheet()
+    timetracker = Timetracker(timesheet)
     command_line = CommandLine(timetracker)
+
     sys.exit(command_line(sys.argv[1:]))

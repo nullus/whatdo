@@ -28,21 +28,25 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from whatdo.model import Timesheet
 from whatdo.port import Storage, Timetracker
 
 
 def test_create_timetracker():
     """Can create instance of Timetracker"""
 
-    timetracker = Timetracker()
+    timesheet = Timesheet()
+    timetracker = Timetracker(timesheet)
     assert isinstance(timetracker, Timetracker)
 
 
 def test_timetracker_log_event_succeeds():
     """Record and event using timetracker"""
 
-    timetracker = Timetracker()
+    timesheet = Timesheet()
+    timetracker = Timetracker(timesheet)
     timetracker.log_event("We are doing a thing")
+    assert len(timesheet) == 1
 
 
 def test_create_storage(empty_timesheet, storage_adaptor):
