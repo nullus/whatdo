@@ -28,6 +28,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from datetime import datetime
+
 from whatdo.model import Timesheet
 from whatdo.port import Storage, Timetracker
 
@@ -49,15 +51,26 @@ def test_timetracker_log_event_succeeds():
     assert len(timesheet) == 1
 
 
-def test_create_storage(empty_timesheet, storage_adaptor):
+def test_create_storage(empty_timesheet, storage_adaptor_mock):
     """Can create Storage instance"""
 
-    storage = Storage(empty_timesheet, storage_adaptor)
+    storage = Storage(empty_timesheet, storage_adaptor_mock)
     assert isinstance(storage, Storage)
 
 
-def test_storage_persist_succeeds(empty_timesheet, storage_adaptor):
+def test_storage_persist_succeeds(empty_timesheet, storage_adaptor_mock):
     """Storage port can persist data"""
 
-    storage = Storage(empty_timesheet, storage_adaptor)
+    storage = Storage(empty_timesheet, storage_adaptor_mock)
     assert storage.persist()
+
+
+def test_storage_init_retrieves_records(empty_timesheet, storage_adaptor_mock):
+    storage_adaptor_mock.retrieve.return_value = iter([
+        (datetime(1985, 10, 26, 1, 21), 'Destination Time'),
+        (datetime(1985, 10, 26, 1, 22), 'Present Time'),
+        (datetime(1985, 10, 26, 1, 20), 'Last Time Departed'),
+    ])
+    Storage(empty_timesheet, storage_adaptor_mock)
+    assert storage_adaptor_mock.retrieve.called_once()
+    assert 3 == len(empty_timesheet)

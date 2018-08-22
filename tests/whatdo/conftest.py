@@ -36,7 +36,7 @@ from whatdo.model import Timesheet
 
 
 @fixture(scope='function')
-def storage_adaptor():
+def storage_adaptor_mock():
     return MagicMock()
 
 

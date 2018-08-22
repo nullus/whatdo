@@ -57,7 +57,13 @@ class StorageInterface(ABC):
 
 class Storage(object):
     def __init__(self, timesheet: Timesheet, adaptor: StorageInterface) -> None:
-        pass
+        self.timesheet = timesheet
+        self.adaptor = adaptor
+        self._restore()
+
+    def _restore(self):
+        for record in self.adaptor.retrieve():
+            self.timesheet.append(Event(record[0], record[1]))
 
     def persist(self) -> bool:
         return True
