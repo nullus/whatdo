@@ -33,11 +33,12 @@ from unittest.mock import MagicMock
 from pytest import fixture
 
 from whatdo.model import Timesheet
+from whatdo.port import StorageInterface
 
 
 @fixture(scope='function')
 def storage_adaptor_mock():
-    return MagicMock()
+    return MagicMock(spec=StorageInterface)
 
 
 @fixture(scope='function')

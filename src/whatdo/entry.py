@@ -30,7 +30,7 @@
 
 import sys
 
-from whatdo.model import Timesheet
+from .model import Timesheet
 from .adaptor import CommandLine
 from .port import Timetracker
 
