@@ -30,7 +30,7 @@
 
 from datetime import datetime
 
-from whatdo.model import Timesheet
+from whatdo.model import Timesheet, Event
 from whatdo.port import Storage, Timetracker
 
 
@@ -61,8 +61,12 @@ def test_create_storage(empty_timesheet, storage_adaptor_mock):
 def test_storage_persist_succeeds(empty_timesheet, storage_adaptor_mock):
     """Storage port can persist data"""
 
+    empty_timesheet.append(Event(datetime(1985, 10, 26, 1, 21), 'Destination Time'))
     storage = Storage(empty_timesheet, storage_adaptor_mock)
-    assert storage.persist()
+    storage.persist()
+    storage_adaptor_mock.store.assert_called_once()
+    first_argument = storage_adaptor_mock.store.call_args[0][0]
+    assert (datetime(1985, 10, 26, 1, 21), 'Destination Time') == next(first_argument)
 
 
 def test_storage_init_retrieves_records(empty_timesheet, storage_adaptor_mock):
@@ -72,5 +76,5 @@ def test_storage_init_retrieves_records(empty_timesheet, storage_adaptor_mock):
         (datetime(1985, 10, 26, 1, 20), 'Last Time Departed'),
     ])
     Storage(empty_timesheet, storage_adaptor_mock)
-    assert storage_adaptor_mock.retrieve.called_once()
+    storage_adaptor_mock.retrieve.assert_called_once()
     assert 3 == len(empty_timesheet)

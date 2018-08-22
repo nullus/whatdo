@@ -37,7 +37,7 @@ from .model import Timesheet, Event
 
 
 class Timetracker(object):
-    def __init__(self, timesheet: Timesheet):
+    def __init__(self, timesheet: Timesheet) -> None:
         super().__init__()
         self.timesheet = timesheet
 
@@ -61,9 +61,9 @@ class Storage(object):
         self.adaptor = adaptor
         self._restore()
 
-    def _restore(self):
+    def _restore(self) -> None:
         for record in self.adaptor.retrieve():
             self.timesheet.append(Event(record[0], record[1]))
 
-    def persist(self) -> bool:
-        return True
+    def persist(self) -> None:
+        self.adaptor.store((record.when, record.what) for record in self.timesheet)
