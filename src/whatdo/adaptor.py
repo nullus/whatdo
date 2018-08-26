@@ -89,8 +89,7 @@ class CsvStorage(DatetimeConversionMixin, StorageInterface):
         with open('timesheet.csv', 'w') as output_file:
             writer = csv.writer(output_file)
             for record in records:
-                writer.writerow(record)
-
+                writer.writerow([self.from_datetime(record[0]), record[1]])
 
     def retrieve(self) -> Iterator[Tuple[datetime, str]]:
         pass

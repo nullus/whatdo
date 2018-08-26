@@ -27,7 +27,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import MagicMock, mock_open, patch
 
 from pytest import raises
@@ -130,3 +130,15 @@ def test_csv_storage_store_opens_file():
         csv_storage.store(test_data)
 
     open_.assert_called_once_with('timesheet.csv', 'w')
+
+
+def test_csv_storage_store_writes_record():
+    test_data = [(datetime(1985, 10, 26, 1, 21, tzinfo=timezone.utc), 'Destination Time'),]
+
+    csv_storage = CsvStorage()
+    open_ = mock_open()
+    with patch('whatdo.adaptor.open', open_):
+        csv_storage.store(test_data)
+
+    handle = open_()
+    handle.write.assert_called_once_with('1985-10-26T01:21:00.000000,Destination Time\r\n')
