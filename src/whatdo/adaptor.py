@@ -79,3 +79,6 @@ class MemoryStorage(DatetimeConversionMixin, StorageInterface):
         self.data.clear()
         for record in records:
             self.data.append((self.from_datetime(record[0]), record[1]))
+
+    def __len__(self) -> int:
+        return len(self.data)

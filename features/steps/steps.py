@@ -28,31 +28,25 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-import sys
-from typing import Type, List
+from behave import *
 
-from .model import Timesheet
-from .adaptor import CommandLine, MemoryStorage
-from .port import Timetracker, StorageInterface, Storage
+from whatdo.entry import Cli
+from whatdo.adaptor import MemoryStorage
 
 
-class Cli(object):
-    def __init__(self, storage_interface: Type[StorageInterface] = MemoryStorage,
-                 timesheet: Type[Timesheet] = Timesheet, timetracker: Type[Timetracker] = Timetracker,
-                 command_line: Type[CommandLine] = CommandLine, storage: Type[Storage] = Storage) -> None:
-        self.timesheet = timesheet()
-        self.storage_interface = storage_interface()
-        self.timetracker = timetracker(self.timesheet)
-        self.command_line = command_line(self.timetracker)
-        self.storage = storage(self.timesheet, self.storage_interface)
-
-    def run(self, args: List[str]) -> int:
-        result: int = self.command_line(args)
-        self.storage.persist()
-        return result
+@given("a new instance of whatdo command line")
+def step_impl(context):
+    context.instance = Cli(storage_interface=MemoryStorage)
+    # FIXME: internal knowledge?
+    assert 0 == len(context.instance.storage_interface)
 
 
-def cli() -> None:
-    """Command line entry point for CommandLine adaptor"""
+@when('we invoke whatdo with argument "{what}"')
+def step_impl(context, what):
+    context.instance.run([what])
 
-    sys.exit(Cli().run(sys.argv[:1]))
+
+@then("whatdo will record a new event")
+def step_impl(context):
+    # FIXME: internal knowledge?
+    assert 1 == len(context.instance.storage_interface)
