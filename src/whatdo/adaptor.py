@@ -82,3 +82,11 @@ class MemoryStorage(DatetimeConversionMixin, StorageInterface):
 
     def __len__(self) -> int:
         return len(self.data)
+
+
+class CsvStorage(DatetimeConversionMixin, StorageInterface):
+    def store(self, records: Iterator[Tuple[datetime, str]]) -> None:
+        pass
+
+    def retrieve(self) -> Iterator[Tuple[datetime, str]]:
+        pass

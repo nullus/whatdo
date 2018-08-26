@@ -32,7 +32,7 @@ from unittest.mock import MagicMock
 
 from pytest import raises
 
-from whatdo.adaptor import CommandLine, MemoryStorage
+from whatdo.adaptor import CommandLine, MemoryStorage, CsvStorage
 
 
 def test_command_line_initialise_success():
@@ -112,3 +112,9 @@ def test_memory_storage_retrieve_records():
         assert record[1] == test_data[i][1]
 
     assert i == len(test_data) - 1
+
+
+def test_csv_storage_initialise_success():
+
+    csv_storage = CsvStorage()
+    assert isinstance(csv_storage, CsvStorage)
