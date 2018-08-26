@@ -27,7 +27,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-
+import csv
 from argparse import ArgumentParser
 from datetime import datetime, timezone
 from typing import List, Iterator, Tuple
@@ -86,7 +86,11 @@ class MemoryStorage(DatetimeConversionMixin, StorageInterface):
 
 class CsvStorage(DatetimeConversionMixin, StorageInterface):
     def store(self, records: Iterator[Tuple[datetime, str]]) -> None:
-        pass
+        with open('timesheet.csv', 'w') as output_file:
+            writer = csv.writer(output_file)
+            for record in records:
+                writer.writerow(record)
+
 
     def retrieve(self) -> Iterator[Tuple[datetime, str]]:
         pass

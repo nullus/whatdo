@@ -28,7 +28,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 from datetime import datetime
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, mock_open, patch
 
 from pytest import raises
 
@@ -84,7 +84,6 @@ def test_memory_storage_initialise_success():
 
 
 def test_memory_storage_store_records():
-
     test_data = [
         (datetime(1985, 10, 26, 1, 21), 'Destination Time'),
         (datetime(1985, 10, 26, 1, 22), 'Present Time'),
@@ -96,7 +95,6 @@ def test_memory_storage_store_records():
 
 
 def test_memory_storage_retrieve_records():
-
     test_data = [
         (datetime(1985, 10, 26, 1, 21), 'Destination Time'),
         (datetime(1985, 10, 26, 1, 22), 'Present Time'),
@@ -115,6 +113,20 @@ def test_memory_storage_retrieve_records():
 
 
 def test_csv_storage_initialise_success():
-
     csv_storage = CsvStorage()
     assert isinstance(csv_storage, CsvStorage)
+
+
+def test_csv_storage_store_opens_file():
+    test_data = [
+        (datetime(1985, 10, 26, 1, 21), 'Destination Time'),
+        (datetime(1985, 10, 26, 1, 22), 'Present Time'),
+        (datetime(1985, 10, 26, 1, 20), 'Last Time Departed'),
+    ]
+
+    csv_storage = CsvStorage()
+    open_ = mock_open()
+    with patch('whatdo.adaptor.open', open_):
+        csv_storage.store(test_data)
+
+    open_.assert_called_once_with('timesheet.csv', 'w')
