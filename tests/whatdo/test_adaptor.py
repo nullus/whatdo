@@ -142,3 +142,12 @@ def test_csv_storage_store_writes_record():
 
     handle = open_()
     handle.write.assert_called_once_with('1985-10-26T01:21:00.000000,Destination Time\r\n')
+
+
+def test_csv_storage_retrieve_opens_file():
+    csv_storage = CsvStorage()
+    open_ = mock_open()
+    with patch('whatdo.adaptor.open', open_):
+        csv_storage.retrieve()
+
+    open_.assert_called_once_with('timesheet.csv', 'r')
