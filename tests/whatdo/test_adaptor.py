@@ -125,19 +125,17 @@ def test_csv_storage_store_opens_file():
     ]
 
     csv_storage = CsvStorage()
-    open_ = mock_open()
-    with patch('whatdo.adaptor.open', open_):
+    with patch('whatdo.adaptor.open', mock_open()) as open_:
         csv_storage.store(test_data)
 
     open_.assert_called_once_with('timesheet.csv', 'w')
 
 
 def test_csv_storage_store_writes_record():
-    test_data = [(datetime(1985, 10, 26, 1, 21, tzinfo=timezone.utc), 'Destination Time'),]
+    test_data = [(datetime(1985, 10, 26, 1, 21, tzinfo=timezone.utc), 'Destination Time'), ]
 
     csv_storage = CsvStorage()
-    open_ = mock_open()
-    with patch('whatdo.adaptor.open', open_):
+    with patch('whatdo.adaptor.open', mock_open()) as open_:
         csv_storage.store(test_data)
 
     handle = open_()
@@ -146,8 +144,22 @@ def test_csv_storage_store_writes_record():
 
 def test_csv_storage_retrieve_opens_file():
     csv_storage = CsvStorage()
-    open_ = mock_open()
-    with patch('whatdo.adaptor.open', open_):
-        csv_storage.retrieve()
+    with patch('whatdo.adaptor.open', mock_open()) as open_:
+        list(csv_storage.retrieve())
 
     open_.assert_called_once_with('timesheet.csv', 'r')
+
+
+def test_csv_storage_retrieve_reads_record():
+    csv_data = '1985-10-26T01:21:00.000000,Destination Time\r\n'
+
+    csv_storage = CsvStorage()
+    with patch('whatdo.adaptor.open', mock_open(read_data=csv_data)) as open_:
+        # Make open_ behave like an iterator
+        open_.return_value.__iter__ = lambda self: self
+        open_.return_value.__next__ = lambda self: next(iter(self.readline, ''))
+        test_data = list(csv_storage.retrieve())
+
+    # We need to make the a non timezone aware datetime for comparison
+    assert test_data[0] == (datetime(1985, 10, 26, 1, 21, tzinfo=timezone.utc).astimezone(tz=None).replace(tzinfo=None),
+                            'Destination Time')
