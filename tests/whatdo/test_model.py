@@ -29,17 +29,17 @@
 #
 
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from pytest import raises
 
-from whatdo.model import Event, Timesheet
+from whatdo.model import Event, Timesheet, Task
 
 
 def test_event_created():
     """Create an event"""
 
-    event = Event(datetime.now(), "Something happened")
+    event = Event(datetime.now(), 'Something happened')
     assert isinstance(event, Event)
 
 
@@ -47,7 +47,7 @@ def test_event_properties_match():
     """Event properties are equal to parameters"""
 
     when = datetime(1985, 10, 26, 1, 22)
-    what = "Something happened"
+    what = 'Something happened'
     event = Event(when, what)
     assert event.when == when
     assert event.what == what
@@ -57,7 +57,7 @@ def test_timesheet_append_event_succeeds():
     """Can append an event to a timesheet"""
 
     timesheet = Timesheet()
-    timesheet.append(Event(datetime.now(), "Something happened"))
+    timesheet.append(Event(datetime.now(), 'Something happened'))
     assert len(timesheet) == 1
 
 
@@ -68,3 +68,8 @@ def test_timesheet_append_other_fails():
     with raises(TypeError):
         # noinspection PyTypeChecker
         timesheet.append("Boom")
+
+
+def test_task_created():
+    task = Task(timedelta(hours=1), 'Something happened')
+    assert isinstance(task, Task)

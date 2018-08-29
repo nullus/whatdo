@@ -28,9 +28,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from datetime import datetime
+from datetime import date, datetime, timedelta
 
-from whatdo.model import Timesheet, Event
+from pytest import mark
+
+from whatdo.model import Task, Timesheet, Event
 from whatdo.port import Storage, Timetracker
 
 
@@ -49,6 +51,16 @@ def test_timetracker_log_event_succeeds():
     timetracker = Timetracker(timesheet)
     timetracker.log_event("We are doing a thing")
     assert len(timesheet) == 1
+
+
+@mark.skip('WIP')
+def test_timetracker_task_summary_day_correct_total():
+    timesheet = Timesheet()
+    timesheet.append(Event(datetime(1985, 10, 26, 1, 21), 'Destination Time'))
+    timesheet.append(Event(datetime(1985, 10, 26, 1, 22), 'Present Time'))
+    timetracker = Timetracker(timesheet)
+    tasks = timetracker.task_summary_day(date(1985, 10, 26))
+    assert tasks[0] == Task(timedelta(seconds=60), 'Destination Time')
 
 
 def test_create_storage(empty_timesheet, storage_adaptor_mock):

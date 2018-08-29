@@ -28,7 +28,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 
@@ -52,3 +52,8 @@ class Timesheet(List[Event]):
         if not isinstance(item, Event):
             raise TypeError(f"Expected item to be Event (got {type(item)})")
         return super().append(item)
+
+
+class Task(object):
+    def __init__(self, duration: timedelta, what: str) -> None:
+        pass
