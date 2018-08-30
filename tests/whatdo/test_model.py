@@ -70,6 +70,14 @@ def test_timesheet_append_other_fails():
         timesheet.append("Boom")
 
 
+def test_empty_timesheet_find_returns_none_events():
+    timesheet = Timesheet()
+    events = timesheet.find(datetime(1985, 10, 26), datetime(1985, 10, 27))
+
+    assert events[0] == Event(datetime(1985, 10, 26), None)
+    assert events[1] == Event(datetime(1985, 10, 27), None)
+
+
 def test_task_created():
     task = Task(timedelta(hours=1), 'Something happened')
     assert isinstance(task, Task)

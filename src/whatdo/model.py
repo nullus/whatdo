@@ -29,7 +29,7 @@
 #
 
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Optional
 
 
 class Event(object):
@@ -37,10 +37,19 @@ class Event(object):
     An event, timestamp and generic description
     """
 
-    def __init__(self, when: datetime, what: str) -> None:
+    def __init__(self, when: datetime, what: Optional[str]) -> None:
         super().__init__()
         self.when = when
-        self.what = what
+        self._what = what
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Event):
+            return False
+        return self.when == other.when and self._what == other._what
+
+    @property
+    def what(self) -> str:
+        return self._what or ''
 
 
 class Timesheet(List[Event]):
@@ -52,6 +61,12 @@ class Timesheet(List[Event]):
         if not isinstance(item, Event):
             raise TypeError(f"Expected item to be Event (got {type(item)})")
         return super().append(item)
+
+    def find(self, start_datetime: datetime, end_datetime: datetime) -> List[Event]:
+        return [
+            Event(start_datetime, None),
+            Event(end_datetime, None),
+        ]
 
 
 class Task(object):
