@@ -52,6 +52,11 @@ class Event(object):
         return self._what or ''
 
 
+class Task(object):
+    def __init__(self, duration: timedelta, what: str) -> None:
+        pass
+
+
 class Timesheet(List[Event]):
     """
     Collection of events
@@ -65,7 +70,5 @@ class Timesheet(List[Event]):
     def find(self, start: datetime = datetime.min, end: datetime = datetime.max) -> 'Timesheet':
         return Timesheet([event for event in self if start <= event.when < end])
 
-
-class Task(object):
-    def __init__(self, duration: timedelta, what: str) -> None:
-        pass
+    def to_tasks(self) -> List[Task]:
+        return [Task(timedelta(minutes=5), 'Break')]

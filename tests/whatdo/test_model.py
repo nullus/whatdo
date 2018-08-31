@@ -93,6 +93,16 @@ def test_bttf_timesheet_find_none_returns_equivalent_timesheet(bttf_timesheet):
     assert events == bttf_timesheet
 
 
+def test_timesheet_to_tasks_gives_task_list(empty_timesheet):
+    # For an arbitrary value of now
+    empty_timesheet.append(Event(datetime(2018, 8, 31, 18, 50), 'Now'))
+    # If I'm not typing that quickly
+    empty_timesheet.append(Event(datetime(2018, 8, 31, 18, 51), 'Also now'))
+
+    tasks = empty_timesheet.to_tasks()
+    assert len(tasks) == 1
+
+
 def test_task_created():
     task = Task(timedelta(hours=1), 'Something happened')
     assert isinstance(task, Task)
