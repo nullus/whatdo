@@ -47,7 +47,7 @@ def empty_timesheet():
 
 
 @fixture(scope='function')
-def test_timesheet():
+def bttf_timesheet():
     timesheet = Timesheet()
     data = [
         (datetime(1955, 11, 5, 6, 15), 'Arrival'),

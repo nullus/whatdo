@@ -53,12 +53,11 @@ def test_event_properties_match():
     assert event.what == what
 
 
-def test_timesheet_append_event_succeeds():
+def test_timesheet_append_event_succeeds(empty_timesheet):
     """Can append an event to a timesheet"""
 
-    timesheet = Timesheet()
-    timesheet.append(Event(datetime.now(), 'Something happened'))
-    assert len(timesheet) == 1
+    empty_timesheet.append(Event(datetime.now(), 'Something happened'))
+    assert len(empty_timesheet) == 1
 
 
 def test_timesheet_append_other_fails():
@@ -70,11 +69,16 @@ def test_timesheet_append_other_fails():
         timesheet.append("Boom")
 
 
-def test_empty_timesheet_find_returns_empty_array():
-    timesheet = Timesheet()
-    events = timesheet.find(datetime(1985, 10, 26), datetime(1985, 10, 27))
+def test_empty_timesheet_find_returns_empty_array(empty_timesheet):
+    events = empty_timesheet.find(datetime(1985, 10, 26), datetime(1985, 10, 27))
 
     assert len(events) == 0
+
+
+def test_bttf_timesheet_find_returns_partial_array(bttf_timesheet):
+    events = bttf_timesheet.find(datetime.min, datetime(1985, 10, 26, 1, 21))
+
+    assert len(events) == 3
 
 
 def test_task_created():
