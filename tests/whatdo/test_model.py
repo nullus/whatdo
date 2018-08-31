@@ -70,12 +70,11 @@ def test_timesheet_append_other_fails():
         timesheet.append("Boom")
 
 
-def test_empty_timesheet_find_returns_none_events():
+def test_empty_timesheet_find_returns_empty_array():
     timesheet = Timesheet()
     events = timesheet.find(datetime(1985, 10, 26), datetime(1985, 10, 27))
 
-    assert events[0] == Event(datetime(1985, 10, 26), None)
-    assert events[1] == Event(datetime(1985, 10, 27), None)
+    assert len(events) == 0
 
 
 def test_task_created():

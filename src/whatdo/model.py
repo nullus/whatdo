@@ -63,10 +63,7 @@ class Timesheet(List[Event]):
         return super().append(item)
 
     def find(self, start_datetime: datetime, end_datetime: datetime) -> List[Event]:
-        return [
-            Event(start_datetime, None),
-            Event(end_datetime, None),
-        ]
+        return []
 
 
 class Task(object):

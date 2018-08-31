@@ -27,12 +27,12 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-
+from datetime import datetime
 from unittest.mock import MagicMock
 
 from pytest import fixture
 
-from whatdo.model import Timesheet
+from whatdo.model import Timesheet, Event
 from whatdo.port import StorageInterface
 
 
@@ -44,3 +44,19 @@ def storage_adaptor_mock():
 @fixture(scope='function')
 def empty_timesheet():
     return Timesheet()
+
+
+@fixture(scope='function')
+def test_timesheet():
+    timesheet = Timesheet()
+    data = [
+        (datetime(1955, 11, 5, 6, 15), 'Arrival'),
+        (datetime(1955, 11, 12, 22, 4), 'Lightning Strike'),
+        (datetime(1985, 10, 26, 1, 20), 'Last Time Departed'),
+        (datetime(1985, 10, 26, 1, 21), 'Destination Time'),
+        (datetime(1985, 10, 26, 1, 22), 'Present Time'),
+        (datetime(1985, 10, 26, 1, 35), 'Escape'),
+    ]
+    for event in data:
+        timesheet.append(Event(*event))
+    return timesheet
