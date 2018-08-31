@@ -62,8 +62,8 @@ class Timesheet(List[Event]):
             raise TypeError(f"Expected item to be Event (got {type(item)})")
         return super().append(item)
 
-    def find(self, start_datetime: datetime, end_datetime: datetime) -> List[Event]:
-        return [event for event in self if start_datetime <= event.when < end_datetime]
+    def find(self, start: datetime = datetime.min, end: datetime = datetime.max) -> 'Timesheet':
+        return Timesheet([event for event in self if start <= event.when < end])
 
 
 class Task(object):

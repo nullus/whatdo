@@ -31,7 +31,7 @@
 
 from datetime import datetime, timedelta
 
-from pytest import raises
+from pytest import raises, mark
 
 from whatdo.model import Event, Timesheet, Task
 
@@ -75,10 +75,22 @@ def test_empty_timesheet_find_returns_empty_array(empty_timesheet):
     assert len(events) == 0
 
 
-def test_bttf_timesheet_find_returns_partial_array(bttf_timesheet):
-    events = bttf_timesheet.find(datetime.min, datetime(1985, 10, 26, 1, 21))
+def test_bttf_timesheet_find_start_returns_partial_array(bttf_timesheet):
+    events = bttf_timesheet.find(start=datetime(1985, 10, 26, 1, 21))
 
     assert len(events) == 3
+
+
+def test_bttf_timesheet_find_end_returns_partial_array(bttf_timesheet):
+    events = bttf_timesheet.find(end=datetime(1985, 10, 26, 1, 21))
+
+    assert len(events) == 3
+
+
+def test_bttf_timesheet_find_none_returns_equivalent_array(bttf_timesheet):
+    events = bttf_timesheet.find()
+
+    assert events == bttf_timesheet
 
 
 def test_task_created():
