@@ -137,3 +137,11 @@ def test_task_summary_summarise_tasks():
         Task(timedelta(hours=2), 'Refactoring'),
     ])
     assert 1 == len(task_summary)
+
+
+def test_task_summary_summarise_duration():
+    task_summary = TaskSummary([
+        Task(timedelta(hours=1), 'Refactoring'),
+        Task(timedelta(hours=2), 'Refactoring'),
+    ])
+    assert timedelta(hours=3) == task_summary['Refactoring']
