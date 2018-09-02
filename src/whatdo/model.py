@@ -29,7 +29,7 @@
 #
 from collections import OrderedDict
 from datetime import datetime, timedelta
-from typing import List, Optional, Iterable
+from typing import List, Optional, Iterable, Dict
 
 
 class Event(object):
@@ -40,16 +40,12 @@ class Event(object):
     def __init__(self, when: datetime, what: Optional[str]) -> None:
         super().__init__()
         self.when = when
-        self._what = what
+        self.what = what
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Event):
             return False
-        return self.when == other.when and self._what == other._what
-
-    @property
-    def what(self) -> str:
-        return self._what or ''
+        return self.when == other.when and self.what == other.what
 
 
 class Task(object):
@@ -75,12 +71,12 @@ class Timesheet(List[Event]):
         return [Task(y.when - x.when, x.what) for (x, y) in zip(self, self[1:])]
 
 
-class TaskSummary(OrderedDict):
+class TaskSummary(OrderedDict, Dict[str, timedelta]):
     def __init__(self, tasks: Iterable[Task]) -> None:
         super().__init__()
         for task in tasks:
             self[task.what] += task.duration
 
-    def __missing__(self, key) -> timedelta:
+    def __missing__(self, key: str) -> timedelta:
         self[key] = value = timedelta()
         return value
