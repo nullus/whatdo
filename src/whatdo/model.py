@@ -27,7 +27,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-
+from collections import OrderedDict
 from datetime import datetime, timedelta
 from typing import List, Optional, Iterable
 
@@ -75,7 +75,11 @@ class Timesheet(List[Event]):
         return [Task(y.when - x.when, x.what) for (x, y) in zip(self, self[1:])]
 
 
-class TaskSummary(object):
+class TaskSummary(OrderedDict):
     def __init__(self, tasks: Iterable[Task]) -> None:
         super().__init__()
-        self.tasks = tasks
+        for task in tasks:
+            if task.what in self:
+                self[task.what] += task.duration
+            else:
+                self[task.what] = task.duration

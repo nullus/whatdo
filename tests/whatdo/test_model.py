@@ -129,3 +129,11 @@ def test_task_created():
 def test_task_summary_created():
     task_summary = TaskSummary([Task(timedelta(hours=1), 'Refactoring')])
     assert isinstance(task_summary, TaskSummary)
+
+
+def test_task_summary_summarise_tasks():
+    task_summary = TaskSummary([
+        Task(timedelta(hours=1), 'Refactoring'),
+        Task(timedelta(hours=2), 'Refactoring'),
+    ])
+    assert 1 == len(task_summary)
