@@ -109,6 +109,12 @@ def test_timesheet_to_tasks_gives_valid_task(bttf_timesheet):
     assert 'Arrival' == tasks[0].what
 
 
+def test_timesheet_to_tasks_gives_all_tasks(bttf_timesheet):
+    tasks = bttf_timesheet.to_tasks()
+    assert timedelta(minutes=13) == tasks[4].duration
+    assert 'Present Time' == tasks[4].what
+
+
 def test_task_created():
     task = Task(timedelta(hours=1), 'Something happened')
     assert isinstance(task, Task)

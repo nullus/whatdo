@@ -72,4 +72,4 @@ class Timesheet(List[Event]):
         return Timesheet([event for event in self if start <= event.when < end])
 
     def to_tasks(self) -> List[Task]:
-        return [Task(self[1].when - self[0].when, self[0].what)]
+        return [Task(y.when - x.when, x.what) for (x, y) in zip(self, self[1:])]
