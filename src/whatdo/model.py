@@ -32,6 +32,12 @@ from datetime import datetime, timedelta
 from typing import List, Optional, Iterable, Dict
 
 
+class Task(object):
+    def __init__(self, duration: timedelta, what: str) -> None:
+        self.duration = duration
+        self.what = what
+
+
 class Event(object):
     """
     An event, timestamp and generic description
@@ -47,11 +53,19 @@ class Event(object):
             return False
         return self.when == other.when and self.what == other.what
 
+    def to_task(self, end: 'Event') -> Task:
+        return Task(end.when - self.when, self.what)
 
-class Task(object):
-    def __init__(self, duration: timedelta, what: str) -> None:
-        self.duration = duration
-        self.what = what
+
+class TaskSummary(OrderedDict, Dict[str, timedelta]):
+    def __init__(self, tasks: Iterable[Task]) -> None:
+        super().__init__()
+        for task in tasks:
+            self[task.what] += task.duration
+
+    def __missing__(self, key: str) -> timedelta:
+        self[key] = value = timedelta()
+        return value
 
 
 class Timesheet(List[Event]):
@@ -68,15 +82,4 @@ class Timesheet(List[Event]):
         return Timesheet([event for event in self if start <= event.when < end])
 
     def to_tasks(self) -> List[Task]:
-        return [Task(y.when - x.when, x.what) for (x, y) in zip(self, self[1:])]
-
-
-class TaskSummary(OrderedDict, Dict[str, timedelta]):
-    def __init__(self, tasks: Iterable[Task]) -> None:
-        super().__init__()
-        for task in tasks:
-            self[task.what] += task.duration
-
-    def __missing__(self, key: str) -> timedelta:
-        self[key] = value = timedelta()
-        return value
+        return [x.to_task(y) for x, y in zip(self, self[1:])]
