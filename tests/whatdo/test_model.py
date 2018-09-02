@@ -103,6 +103,12 @@ def test_timesheet_to_tasks_gives_task_list(empty_timesheet):
     assert len(tasks) == 1
 
 
+def test_timesheet_to_tasks_gives_valid_task(bttf_timesheet):
+    tasks = bttf_timesheet.to_tasks()
+    assert timedelta(days=7, hours=15, minutes=49) == tasks[0].duration
+    assert 'Arrival' == tasks[0].what
+
+
 def test_task_created():
     task = Task(timedelta(hours=1), 'Something happened')
     assert isinstance(task, Task)

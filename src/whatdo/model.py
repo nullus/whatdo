@@ -54,7 +54,8 @@ class Event(object):
 
 class Task(object):
     def __init__(self, duration: timedelta, what: str) -> None:
-        pass
+        self.duration = duration
+        self.what = what
 
 
 class Timesheet(List[Event]):
@@ -71,4 +72,4 @@ class Timesheet(List[Event]):
         return Timesheet([event for event in self if start <= event.when < end])
 
     def to_tasks(self) -> List[Task]:
-        return [Task(timedelta(minutes=5), 'Break')]
+        return [Task(self[1].when - self[0].when, self[0].what)]
