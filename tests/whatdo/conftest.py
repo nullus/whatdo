@@ -60,3 +60,16 @@ def bttf_timesheet():
     for event in data:
         timesheet.append(Event(*event))
     return timesheet
+
+
+@fixture(scope='function')
+def dup_timesheet():
+    timesheet = Timesheet()
+    data = [
+        (datetime(2018, 9, 2, 15, 0), 'Implement Task grouping'),
+        (datetime(2018, 9, 2, 15, 10), 'Implement Task grouping'),
+        (datetime(2018, 9, 2, 15, 15), 'Complete Task grouping'),
+    ]
+    for event in data:
+        timesheet.append(Event(*event))
+    return timesheet

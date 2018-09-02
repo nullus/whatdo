@@ -31,9 +31,9 @@
 
 from datetime import datetime, timedelta
 
-from pytest import raises
+from pytest import raises, mark
 
-from whatdo.model import Event, Timesheet, Task
+from whatdo.model import Event, Timesheet, Task, TaskSummary
 
 
 def test_event_created():
@@ -49,15 +49,15 @@ def test_event_properties_match():
     when = datetime(1985, 10, 26, 1, 22)
     what = 'Something happened'
     event = Event(when, what)
-    assert event.when == when
-    assert event.what == what
+    assert when == event.when
+    assert what == event.what
 
 
 def test_timesheet_append_event_succeeds(empty_timesheet):
     """Can append an event to a timesheet"""
 
     empty_timesheet.append(Event(datetime.now(), 'Something happened'))
-    assert len(empty_timesheet) == 1
+    assert 1 == len(empty_timesheet)
 
 
 def test_timesheet_append_other_fails():
@@ -72,25 +72,25 @@ def test_timesheet_append_other_fails():
 def test_empty_timesheet_find_returns_empty_timesheet(empty_timesheet):
     events = empty_timesheet.find(datetime(1985, 10, 26), datetime(1985, 10, 27))
 
-    assert len(events) == 0
+    assert 0 == len(events)
 
 
 def test_bttf_timesheet_find_start_returns_partial_timesheet(bttf_timesheet):
     events = bttf_timesheet.find(start=datetime(1985, 10, 26, 1, 21))
 
-    assert len(events) == 3
+    assert 3 == len(events)
 
 
 def test_bttf_timesheet_find_end_returns_partial_timesheet(bttf_timesheet):
     events = bttf_timesheet.find(end=datetime(1985, 10, 26, 1, 21))
 
-    assert len(events) == 3
+    assert 3 == len(events)
 
 
 def test_bttf_timesheet_find_none_returns_equivalent_timesheet(bttf_timesheet):
     events = bttf_timesheet.find()
 
-    assert events == bttf_timesheet
+    assert bttf_timesheet == events
 
 
 def test_timesheet_to_tasks_gives_task_list(empty_timesheet):
@@ -100,7 +100,7 @@ def test_timesheet_to_tasks_gives_task_list(empty_timesheet):
     empty_timesheet.append(Event(datetime(2018, 8, 31, 18, 51), 'Also now'))
 
     tasks = empty_timesheet.to_tasks()
-    assert len(tasks) == 1
+    assert 1 == len(tasks)
 
 
 def test_timesheet_to_tasks_gives_valid_task(bttf_timesheet):
@@ -115,6 +115,17 @@ def test_timesheet_to_tasks_gives_all_tasks(bttf_timesheet):
     assert 'Present Time' == tasks[4].what
 
 
+@mark.skip('WIP')
+def test_timesheet_to_tasks_groups_by_what(dup_timesheet):
+    tasks = dup_timesheet.to_tasks()
+    assert 1 == len(tasks)
+
+
 def test_task_created():
     task = Task(timedelta(hours=1), 'Something happened')
     assert isinstance(task, Task)
+
+
+def test_task_summary_created():
+    task_summary = TaskSummary([Task(timedelta(hours=1), 'Refactoring')])
+    assert isinstance(task_summary, TaskSummary)

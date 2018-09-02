@@ -29,7 +29,7 @@
 #
 
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import List, Optional, Iterable
 
 
 class Event(object):
@@ -73,3 +73,9 @@ class Timesheet(List[Event]):
 
     def to_tasks(self) -> List[Task]:
         return [Task(y.when - x.when, x.what) for (x, y) in zip(self, self[1:])]
+
+
+class TaskSummary(object):
+    def __init__(self, tasks: Iterable[Task]) -> None:
+        super().__init__()
+        self.tasks = tasks
