@@ -43,7 +43,7 @@ class Event(object):
     An event, timestamp and generic description
     """
 
-    def __init__(self, when: datetime, what: Optional[str]) -> None:
+    def __init__(self, when: datetime, what: str) -> None:
         super().__init__()
         self.when = when
         self.what = what
