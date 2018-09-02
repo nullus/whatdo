@@ -79,7 +79,8 @@ class TaskSummary(OrderedDict):
     def __init__(self, tasks: Iterable[Task]) -> None:
         super().__init__()
         for task in tasks:
-            if task.what in self:
-                self[task.what] += task.duration
-            else:
-                self[task.what] = task.duration
+            self[task.what] += task.duration
+
+    def __missing__(self, key) -> timedelta:
+        self[key] = value = timedelta()
+        return value
