@@ -32,12 +32,12 @@ import sys
 from typing import Type, List
 
 from .model import Timesheet
-from .adaptor import CommandLine, MemoryStorage
+from .adaptor import CommandLine, CsvStorage
 from .port import Timetracker, StorageInterface, Storage
 
 
 class Cli(object):
-    def __init__(self, storage_interface: Type[StorageInterface] = MemoryStorage,
+    def __init__(self, storage_interface: Type[StorageInterface] = CsvStorage,
                  timesheet: Type[Timesheet] = Timesheet, timetracker: Type[Timetracker] = Timetracker,
                  command_line: Type[CommandLine] = CommandLine, storage: Type[Storage] = Storage) -> None:
         self.timesheet = timesheet()
@@ -55,4 +55,4 @@ class Cli(object):
 def cli() -> None:
     """Command line entry point for CommandLine adaptor"""
 
-    sys.exit(Cli().run(sys.argv[:1]))
+    sys.exit(Cli().run(sys.argv[1:]))

@@ -42,7 +42,7 @@ class Task(object):
             return super().__eq__(other)
         return self.what == other.what
 
-    def __add__(self, other) -> 'Task':
+    def __add__(self, other: object) -> 'Task':
         if not isinstance(other, Task):
             raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
         if self.what != other.what:
