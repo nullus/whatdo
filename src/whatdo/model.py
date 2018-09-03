@@ -27,15 +27,30 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-from collections import OrderedDict
+
 from datetime import datetime, timedelta
-from typing import List, Optional, Iterable, Dict
+from typing import List, Iterable
 
 
 class Task(object):
     def __init__(self, duration: timedelta, what: str) -> None:
         self.duration = duration
         self.what = what
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Task):
+            return False
+        return self.what == other.what
+
+    def __add__(self, other) -> 'Task':
+        if not isinstance(other, Task):
+            raise super().__eq__(other)
+        if self.what != other.what:
+            raise ValueError(f"Expected what to be {self.what} (got {other.what})")
+        return Task(self.duration + other.duration, self.what)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({repr(self.duration)}, {repr(self.what)})"
 
 
 class Event(object):
@@ -50,22 +65,21 @@ class Event(object):
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Event):
-            return False
+            return super().__eq__(other)
         return self.when == other.when and self.what == other.what
 
     def to_task(self, end: 'Event') -> Task:
         return Task(end.when - self.when, self.what)
 
 
-class TaskSummary(OrderedDict, Dict[str, timedelta]):
+class TaskSummary(List[Task]):
     def __init__(self, tasks: Iterable[Task]) -> None:
         super().__init__()
         for task in tasks:
-            self[task.what] += task.duration
-
-    def __missing__(self, key: str) -> timedelta:
-        self[key] = value = timedelta()
-        return value
+            try:
+                self[self.index(task)] += task
+            except ValueError:
+                self.append(task)
 
 
 class Timesheet(List[Event]):

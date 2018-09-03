@@ -126,6 +126,17 @@ def test_task_created():
     assert isinstance(task, Task)
 
 
+def test_task_add_task_with_same_what_adds_duration():
+    task = Task(timedelta(hours=1), 'This') + Task(timedelta(hours=5), 'This')
+    assert Task(timedelta(hours=6), 'This') == task
+    assert timedelta(hours=6) == task.duration
+
+
+def test_task_add_task_with_different_what_raises_value_error():
+    with raises(ValueError):
+        Task(timedelta(hours=1), 'This') + Task(timedelta(hours=5), 'That')
+
+
 def test_task_summary_created():
     task_summary = TaskSummary([Task(timedelta(hours=1), 'Refactoring')])
     assert isinstance(task_summary, TaskSummary)
@@ -144,4 +155,5 @@ def test_task_summary_summarise_duration():
         Task(timedelta(hours=1), 'Refactoring'),
         Task(timedelta(hours=2), 'Refactoring'),
     ])
-    assert timedelta(hours=3) == task_summary['Refactoring']
+    assert Task(timedelta(hours=3), 'Refactoring') == task_summary[0]
+    assert timedelta(hours=3) == task_summary[0].duration
