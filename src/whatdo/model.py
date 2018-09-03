@@ -95,5 +95,5 @@ class Timesheet(List[Event]):
     def find(self, start: datetime = datetime.min, end: datetime = datetime.max) -> 'Timesheet':
         return Timesheet([event for event in self if start <= event.when < end])
 
-    def to_tasks(self) -> List[Task]:
-        return [x.to_task(y) for x, y in zip(self, self[1:])]
+    def summarise(self) -> TaskSummary:
+        return TaskSummary(x.to_task(y) for x, y in zip(self, self[1:]))

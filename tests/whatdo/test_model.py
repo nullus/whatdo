@@ -99,25 +99,25 @@ def test_timesheet_to_tasks_gives_task_list(empty_timesheet):
     # If I'm not typing that quickly
     empty_timesheet.append(Event(datetime(2018, 8, 31, 18, 51), 'Also now'))
 
-    tasks = empty_timesheet.to_tasks()
+    tasks = empty_timesheet.summarise()
     assert 1 == len(tasks)
 
 
 def test_timesheet_to_tasks_gives_valid_task(bttf_timesheet):
-    tasks = bttf_timesheet.to_tasks()
+    tasks = bttf_timesheet.summarise()
     assert timedelta(days=7, hours=15, minutes=49) == tasks[0].duration
     assert 'Arrival' == tasks[0].what
 
 
 def test_timesheet_to_tasks_gives_all_tasks(bttf_timesheet):
-    tasks = bttf_timesheet.to_tasks()
+    tasks = bttf_timesheet.summarise()
     assert timedelta(minutes=13) == tasks[4].duration
     assert 'Present Time' == tasks[4].what
 
 
 @mark.skip('WIP')
 def test_timesheet_to_tasks_groups_by_what(dup_timesheet):
-    tasks = dup_timesheet.to_tasks()
+    tasks = dup_timesheet.summarise()
     assert 1 == len(tasks)
 
 
