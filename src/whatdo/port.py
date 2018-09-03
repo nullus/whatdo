@@ -29,9 +29,9 @@
 #
 
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, date, time, timedelta
 
-from typing import Iterator, Tuple
+from typing import Iterator, Tuple, List
 
 from .model import Timesheet, Event
 
@@ -43,6 +43,11 @@ class Timetracker(object):
 
     def log_event(self, what: str) -> None:
         self.timesheet.append(Event(datetime.now(), what))
+
+    def task_summary_by_day(self, day: date) -> List[Tuple[float, str]]:
+        tasks = self.timesheet.find_in_range(datetime.combine(day, time()),
+                                             datetime.combine(day + timedelta(days=1), time())).summarise()
+        return [(task.duration.total_seconds() / 3600.0, task.what) for task in tasks]
 
 
 class StorageInterface(ABC):
