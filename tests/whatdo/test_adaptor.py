@@ -33,6 +33,7 @@ from unittest.mock import MagicMock, mock_open, patch
 from pytest import raises
 
 from whatdo.adaptor import CommandLine, MemoryStorage, CsvStorage
+from whatdo.port import Timetracker
 
 
 def test_command_line_initialise_success():
@@ -68,12 +69,24 @@ def test_command_line_call_with_arguments_invokes_log_event():
 def test_command_line_call_with_one_argument_invokes_log_event():
     """When CommandLine is called invoke log_event"""
 
-    timetracker = MagicMock()
+    timetracker = MagicMock(spec=Timetracker)
     # noinspection PyTypeChecker
     command_line = CommandLine(timetracker)
     command_line(['one'])
     timetracker.log_event.assert_called_once()
     timetracker.log_event.assert_called_with('one')
+
+
+def test_command_line_call_with_today_argument_produces_summary(capsys):
+    timetracker = MagicMock(spec=Timetracker)
+    # noinspection PyTypeChecker
+    command_line = CommandLine(timetracker)
+    timetracker.task_summary_by_day.return_value = [
+        (2.0, 'Stuff and things')
+    ]
+    command_line(['today'])
+    (out, _) = capsys.readouterr()
+    assert '2h\tStuff and things' in out
 
 
 def test_memory_storage_initialise_success():

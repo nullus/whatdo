@@ -27,9 +27,11 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
+
 import csv
 from argparse import ArgumentParser
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
+from math import modf
 from typing import List, Iterator, Tuple
 
 from .port import StorageInterface, Timetracker
@@ -47,8 +49,23 @@ class CommandLine(object):
         parser = ArgumentParser(description=self.__doc__)
         parser.add_argument('what', nargs='+')
         what: str = ' '.join(parser.parse_args(arguments).what)
-        self.timetracker.log_event(what)
+        if what == 'today':
+            self.output_daily_summary()
+        else:
+            self.timetracker.log_event(what)
         return 0
+
+    def output_daily_summary(self) -> None:
+        tasks = self.timetracker.task_summary_by_day(date.today())
+        for duration, description in tasks:
+            fraction, hour = modf(duration)
+            minute = int(fraction * 60)
+            row = []
+            if hour > 0:
+                row.append(f"{int(hour)}h")
+            if minute > 0:
+                row.append(f"{minute}")
+            print(" ".join(row) + f"\t{description}")
 
 
 class DatetimeConversionMixin(object):
@@ -96,4 +113,3 @@ class CsvStorage(DatetimeConversionMixin, StorageInterface):
             reader = csv.reader(input_file)
             for record in reader:
                 yield self.to_datetime(record[0]), record[1]
-
