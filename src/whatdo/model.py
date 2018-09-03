@@ -39,12 +39,12 @@ class Task(object):
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Task):
-            return False
+            return super().__eq__(other)
         return self.what == other.what
 
     def __add__(self, other) -> 'Task':
         if not isinstance(other, Task):
-            raise super().__eq__(other)
+            raise TypeError(f"unsupported operand type(s) for +: '{type(self).__name__}' and '{type(other).__name__}'")
         if self.what != other.what:
             raise ValueError(f"Expected what to be {self.what} (got {other.what})")
         return Task(self.duration + other.duration, self.what)
@@ -92,8 +92,8 @@ class Timesheet(List[Event]):
             raise TypeError(f"Expected item to be Event (got {type(item)})")
         return super().append(item)
 
-    def find(self, start: datetime = datetime.min, end: datetime = datetime.max) -> 'Timesheet':
-        return Timesheet([event for event in self if start <= event.when < end])
+    def find_in_range(self, start: datetime = datetime.min, end: datetime = datetime.max) -> 'Timesheet':
+        return Timesheet(event for event in self if start <= event.when < end)
 
     def summarise(self) -> TaskSummary:
         return TaskSummary(x.to_task(y) for x, y in zip(self, self[1:]))

@@ -28,10 +28,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-
 from datetime import datetime, timedelta
 
-from pytest import raises, mark
+from pytest import raises
 
 from whatdo.model import Event, Timesheet, Task, TaskSummary
 
@@ -70,30 +69,30 @@ def test_timesheet_append_other_fails():
 
 
 def test_empty_timesheet_find_returns_empty_timesheet(empty_timesheet):
-    events = empty_timesheet.find(datetime(1985, 10, 26), datetime(1985, 10, 27))
+    events = empty_timesheet.find_in_range(datetime(1985, 10, 26), datetime(1985, 10, 27))
 
     assert 0 == len(events)
 
 
 def test_bttf_timesheet_find_start_returns_partial_timesheet(bttf_timesheet):
-    events = bttf_timesheet.find(start=datetime(1985, 10, 26, 1, 21))
+    events = bttf_timesheet.find_in_range(start=datetime(1985, 10, 26, 1, 21))
 
     assert 3 == len(events)
 
 
 def test_bttf_timesheet_find_end_returns_partial_timesheet(bttf_timesheet):
-    events = bttf_timesheet.find(end=datetime(1985, 10, 26, 1, 21))
+    events = bttf_timesheet.find_in_range(end=datetime(1985, 10, 26, 1, 21))
 
     assert 3 == len(events)
 
 
 def test_bttf_timesheet_find_none_returns_equivalent_timesheet(bttf_timesheet):
-    events = bttf_timesheet.find()
+    events = bttf_timesheet.find_in_range()
 
     assert bttf_timesheet == events
 
 
-def test_timesheet_to_tasks_gives_task_list(empty_timesheet):
+def test_timesheet_summarise_gives_task_list(empty_timesheet):
     # For an arbitrary value of now
     empty_timesheet.append(Event(datetime(2018, 8, 31, 18, 50), 'Now'))
     # If I'm not typing that quickly
@@ -103,20 +102,19 @@ def test_timesheet_to_tasks_gives_task_list(empty_timesheet):
     assert 1 == len(tasks)
 
 
-def test_timesheet_to_tasks_gives_valid_task(bttf_timesheet):
+def test_timesheet_summarise_gives_valid_task(bttf_timesheet):
     tasks = bttf_timesheet.summarise()
     assert timedelta(days=7, hours=15, minutes=49) == tasks[0].duration
     assert 'Arrival' == tasks[0].what
 
 
-def test_timesheet_to_tasks_gives_all_tasks(bttf_timesheet):
+def test_timesheet_summarise_gives_all_tasks(bttf_timesheet):
     tasks = bttf_timesheet.summarise()
     assert timedelta(minutes=13) == tasks[4].duration
     assert 'Present Time' == tasks[4].what
 
 
-@mark.skip('WIP')
-def test_timesheet_to_tasks_groups_by_what(dup_timesheet):
+def test_timesheet_summarise_groups_by_what(dup_timesheet):
     tasks = dup_timesheet.summarise()
     assert 1 == len(tasks)
 
