@@ -1,8 +1,8 @@
 
-Feature: Log event
+Feature: Track time
     So that timesheets can be filled with minimal effort
     As a command line user
-    I want to be able to log events with a simple command
+    I want to be able to track time with simple commands
 
   Scenario: Log an event now via command line
       Given a new instance of whatdo command line
