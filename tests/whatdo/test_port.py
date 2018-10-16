@@ -28,11 +28,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
-from pytest import mark, approx
+from pytest import approx
 
-from whatdo.model import Task, Timesheet, Event
+from whatdo.model import Timesheet, Event
 from whatdo.port import Storage, Timetracker
 
 
