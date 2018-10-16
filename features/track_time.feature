@@ -19,5 +19,5 @@ Feature: Track time
         Then whatdo will report
             """
             1h\tStuff
-            2h 30\tThings
+            2h 30m\tThings
             """

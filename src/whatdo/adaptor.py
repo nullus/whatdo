@@ -64,7 +64,7 @@ class CommandLine(object):
             if hour > 0:
                 row.append(f"{int(hour)}h")
             if minute > 0:
-                row.append(f"{minute}")
+                row.append(f"{minute}m")
             print(" ".join(row) + f"\t{description}")
 
 
