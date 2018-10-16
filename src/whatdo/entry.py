@@ -47,12 +47,13 @@ class Cli(object):
         self.storage = storage(self.timesheet, self.storage_interface)
 
     def run(self, args: List[str]) -> int:
+        self.storage.restore()
         result: int = self.command_line(args)
         self.storage.persist()
         return result
 
+    def __call__(self) -> None:
+        sys.exit(self.run(sys.argv[1:]))
 
-def cli() -> None:
-    """Command line entry point for CommandLine adaptor"""
 
-    sys.exit(Cli().run(sys.argv[1:]))
+cli: Cli = Cli()

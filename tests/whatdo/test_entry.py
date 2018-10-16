@@ -32,11 +32,14 @@ import sys
 
 from pytest import raises
 
-from whatdo.entry import cli
+from whatdo.adaptor import MemoryStorage
+from whatdo.entry import Cli
 
 
 def test_cli_empty_arguments_returns_nonzero(monkeypatch):
     """Without arguments entry point should return an error status"""
+
+    cli = Cli(storage_interface=MemoryStorage)
 
     monkeypatch.setattr(sys, 'argv', [''])
     with raises(SystemExit) as exit_:
@@ -46,6 +49,8 @@ def test_cli_empty_arguments_returns_nonzero(monkeypatch):
 
 def test_cli_arguments_returns_zero(monkeypatch):
     """With arguments entry point should return a success status"""
+
+    cli = Cli(storage_interface=MemoryStorage)
 
     monkeypatch.setattr(sys, 'argv', [''] + 'some arguments please'.split(' '))
     with raises(SystemExit) as exit_:

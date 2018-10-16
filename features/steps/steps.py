@@ -28,6 +28,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
+from datetime import datetime, date
+
 from behave import *
 
 from whatdo.entry import Cli
@@ -50,3 +52,20 @@ def step_impl(context, what):
 def step_impl(context):
     # FIXME: internal knowledge?
     assert 1 == len(context.instance.storage_interface)
+
+
+@given("a log containing events")
+def step_impl(context):
+    context.instance.storage_interface.store(
+        (datetime.combine(date.today(), datetime.strptime(row["When"], "%H:%M").time()), row["What"])
+        for row in context.table
+    )
+    assert 3 == len(context.instance.storage_interface)
+
+
+@then("whatdo will report")
+def step_impl(context):
+    # Rewind capture object
+    context.stdout_capture.seek(0)
+    # Force encoding on text to permit use of escape characters
+    assert context.text.encode('ascii').decode('unicode_escape') in ''.join(context.stdout_capture.readlines())

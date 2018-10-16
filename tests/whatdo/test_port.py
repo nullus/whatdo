@@ -86,6 +86,6 @@ def test_storage_init_retrieves_records(empty_timesheet, storage_adaptor_mock):
         (datetime(1985, 10, 26, 1, 22), 'Present Time'),
         (datetime(1985, 10, 26, 1, 20), 'Last Time Departed'),
     ])
-    Storage(empty_timesheet, storage_adaptor_mock)
+    Storage(empty_timesheet, storage_adaptor_mock).restore()
     storage_adaptor_mock.retrieve.assert_called_once()
     assert 3 == len(empty_timesheet)
