@@ -109,7 +109,11 @@ class CsvStorage(DatetimeConversionMixin, StorageInterface):
                 writer.writerow([self.from_datetime(record[0]), record[1]])
 
     def retrieve(self) -> Iterator[Tuple[datetime, str]]:
-        with open('timesheet.csv', 'r') as input_file:
-            reader = csv.reader(input_file)
-            for record in reader:
-                yield self.to_datetime(record[0]), record[1]
+        try:
+            with open('timesheet.csv', 'r') as input_file:
+                reader = csv.reader(input_file)
+                for record in reader:
+                    yield self.to_datetime(record[0]), record[1]
+        except FileNotFoundError:
+            # Empty generator
+            pass
