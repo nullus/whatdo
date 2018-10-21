@@ -1,5 +1,7 @@
 # What Do
 
+![Travis CI](https://travis-ci.com/nullus/whatdo.svg?branch=master)
+
 ## What
 
 Timetracking

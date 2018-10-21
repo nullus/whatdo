@@ -16,3 +16,5 @@ script:
 - behave
 
 sudo: required
+
+after_success: codecov
