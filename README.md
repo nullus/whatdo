@@ -1,6 +1,6 @@
 # What Do
 
-![Travis CI](https://travis-ci.com/nullus/whatdo.svg?branch=master)
+![Travis CI](https://travis-ci.com/nullus/whatdo.svg?branch=master) ![Codecov](https://codecov.io/github/nullus/whatdo/coverage.svg?branch=master)
 
 ## What
 
