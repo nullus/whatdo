@@ -8,7 +8,7 @@ python:
 - "3.7"
 - 3.8-dev
 
-install: pip install .[test]
+install: pip install -e .[test]
 
 script:
 - mypy src
