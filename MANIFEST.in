@@ -1,0 +1,9 @@
+include .coveragerc
+include .editorconfig
+include LICENSE
+include mypy.ini
+include pytest.ini
+include tox.ini
+recursive-include features *
+recursive-include tests *
+global-exclude __pycache__ *.pyc
